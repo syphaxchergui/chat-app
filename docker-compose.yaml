@@ -1,0 +1,69 @@
+version: '3.8'
+
+services: 
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqlcontainer
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - mysqldb:/var/lib/mysql
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    environment: 
+      MYSQL_DATABASE: chat_app_db
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysqldb
+    networks:
+      - internalnet
+
+  backend:
+    build: ./backend
+    image: backend:v1
+    container_name: backendcontainer
+    restart: always
+    ports:
+      - 5000:5000
+    expose:
+      - 5000
+    environment: 
+      JWT_SECRET: 'arWoREXCUsTENIfERthoPESEcHU'
+      DB_NAME: 'chat_app_db'
+      DB_USERNAME: 'root'
+      DB_PASSWORD: 'root'
+      CLOUD_NAME: 'adwiya'
+      API_KEY: '533724656138586'
+      API_SECRET: 'qQmLeaUVpguPMil1fM08GMhS-I0'
+      SERVICE_TAGS: dev
+      SERVICE_NAME: backendservice
+    depends_on:
+      - mysqldb
+    networks:
+      - internalnet
+
+  frontend:
+    build: ./frontend
+    image: frontend:v1
+    container_name: frontendcontainer
+    ports:
+      - 5173:5173
+    expose:
+      - 5173
+    environment: 
+      SERVICE_TAGS: dev
+      SERVICE_NAME: frontendservice
+    depends_on:
+      - backend
+    networks:
+      - internalnet
+
+volumes:
+  mysqldb:
+
+networks: 
+  internalnet:
+    driver: bridge
