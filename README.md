@@ -6,7 +6,7 @@
 
 - There is one global chat room, and private chat rooms. Clicking on an online user opens a private chat room. 
 
-- Sharing images is possible. I used `cloudinary` for its free tier. (Didn't have access to an AWS account to use S3)
+- Sharing images is possible. I used `cloudinary` for its free tier.
 
 ## Docker deployment
 
