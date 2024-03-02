@@ -11,11 +11,9 @@ import sequelize from './utils/db.js';
 import { initSocket } from './socket/index.js';
 import fetch from 'cross-fetch';
 
-import Replicate from 'replicate';
 
 dotenv.config();
 
-const REPLICATE_API_TOKEN = 'r8_I37KqYhiAEzdYrlwrPDGo9AGWPai25O4YZY3q';
 
 const port = process.env.PORT || 5000;
 
@@ -34,32 +32,6 @@ app.use(
 	})
 );
 
-app.get('/chroma', async (req, res) => {
-	try {
-		const userQuery = req.query?.q;
-
-		
-
-		console.log('started');
-
-		const output = await replicate.run(
-			'mcai/deliberate-v2:8e6663822bbbc982648e3c34214cf42d29fe421b2620cc33d8bda767fc57fe5a',
-			{
-				input: {
-					prompt: `Colorless ${userQuery} for coloring book, less details, high quality, clear image, coloring page, colorless, black and white, line art, vector file, white background, adult coloring book, coloring book page, fit in page, large areas`,
-					negative_prompt:
-						'((watermark)), (text), color, shading, gradient, shadows, transparency, noisy, blurred',
-				},
-			}
-		);
-
-		return res.status(200).json({ success: true, url: output[0] });
-	} catch (error) {
-		console.error(error);
-		res.status(500).json({ success: false, message: error });
-	}
-});
-
 app.use('/api', routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
@@ -74,7 +46,7 @@ app.use((err, req, res, next) => {
 	}
 });
 
-let replicate;
+
 //connect to db
 sequelize
 	.sync()
@@ -82,10 +54,6 @@ sequelize
 		console.log('Connection to database has been established successfully.');
 		server.listen(port, () => {
 			console.log(`Server listening on port ${port}.`);
-			replicate = new Replicate({
-				auth: REPLICATE_API_TOKEN,
-				fetch: fetch,
-			});
 		});
 	})
 	.catch((error) => {
