@@ -31,13 +31,13 @@ services:
     expose:
       - 5000
     environment: 
-      JWT_SECRET: 'arWoREXCUsTENIfERthoPESEcHU'
+      JWT_SECRET: [JWT_SECRET]
       DB_NAME: 'chat_app_db'
       DB_USERNAME: 'root'
       DB_PASSWORD: 'root'
-      CLOUD_NAME: 'adwiya'
-      API_KEY: '533724656138586'
-      API_SECRET: 'qQmLeaUVpguPMil1fM08GMhS-I0'
+      CLOUD_NAME: [CLOUD_NAME]
+      API_KEY: [API_KEY]
+      API_SECRET: [API_SECRET]
       SERVICE_TAGS: dev
       SERVICE_NAME: backendservice
     depends_on:
