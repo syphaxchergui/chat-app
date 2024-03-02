@@ -11,9 +11,7 @@ import sequelize from './utils/db.js';
 import { initSocket } from './socket/index.js';
 import fetch from 'cross-fetch';
 
-
 dotenv.config();
-
 
 const port = process.env.PORT || 5000;
 
